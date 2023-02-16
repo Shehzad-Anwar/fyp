@@ -8,7 +8,7 @@ import OurProducts from "../components/home/OurProducts";
 import Reviews from "../components/home/Reviews";
 import Policies from "../components/home/Policies";
 import Newsletter from "../components/home/Newsletter";
-// import Tabs from "../components/our_products/Tabs";
+import ProductTab from "../components/our_products/ProductTab";
 
 export default function Home({ getUser }) {
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function Home({ getUser }) {
         <Header />
         <NewCollections />
         <BestSeller />
-        {/* <Tabs /> */}
+        <ProductTab />
         <Reviews />
         <Policies />
         <Newsletter />
