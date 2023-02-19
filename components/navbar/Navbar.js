@@ -1,40 +1,25 @@
-import {
-  ShoppingBagIcon,
-  UserIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import React, { useRef, useState, useEffect } from "react";
+import { UserIcon } from "@heroicons/react/24/outline";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/router";
 import Search from "../twe/Search";
 import DropDown from "./DropDown";
 import { Fragment } from "react";
-import { Menu, Transition, Popover } from "@headlessui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart, clearCart } from "../../redux/actions";
+import { Menu, Transition } from "@headlessui/react";
 import { signOut } from "../../redux/actions/Auth";
+import { useCookies } from "react-cookie";
+import SideCart from "./SideCart";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Navbar = ({ user, logOut }) => {
-  const dispatch = useDispatch();
-  let { cart, subtotal } = useSelector((state) => state.CartReducer);
-  // let { user } = useSelector((state) => state.AuthReducer);
-  const ref = useRef();
+const Navbar = () => {
+  const [cookie, setCookie, removeCookie] = useCookies(["user", "token"]);
   const [sideCart, setSideCart] = useState(false);
-  const router = useRouter();
-  const activeCart = () => {
-    setSideCart(!sideCart);
-  };
 
-  useEffect(() => {
-   
-  }, []);
+  const ref = useRef();
 
   const logout = () => {
     toast.success("Your are Successfully LogOut!", {
@@ -47,7 +32,10 @@ const Navbar = ({ user, logOut }) => {
       progress: undefined,
     });
     setTimeout(() => {
-     logOut()
+      console.log("Logout");
+      Object.keys(cookie).forEach((cookieName) => {
+        removeCookie(cookieName);
+      });
     }, 1000);
   };
 
@@ -103,10 +91,10 @@ const Navbar = ({ user, logOut }) => {
       {/* Profile Dropdown */}
       <div
         ref={ref}
-        className="cart space-x-2 items-center flex absolute right-4 top-auto mx-5 cursor-pointer"
+        className="cart items-center flex absolute right-4 top-auto "
       >
-        {user.status && (
-          <>
+        {cookie.user && cookie.token && (
+          <div div className="cursor-pointer">
             {/* User Dropdown */}
             <Menu as="div" className="relative inline-block text-left">
               <div>
@@ -136,9 +124,11 @@ const Navbar = ({ user, logOut }) => {
                         />
                         <div className="pl-2">
                           <p className="text-sm font-medium text-gray-900">
-                            {user.firstName + " " + user.lastName}
+                            {cookie.user.firstName + " " + cookie.user.lastName}
                           </p>
-                          <p className="truncate text-sm">{user.email}</p>
+                          <p className="truncate text-sm">
+                            {cookie.user.email}
+                          </p>
                         </div>
                       </li>
                     </Link>
@@ -161,7 +151,7 @@ const Navbar = ({ user, logOut }) => {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
-                        <a
+                        <Link
                           href={"/ordersHistory"}
                           className={classNames(
                             active
@@ -171,24 +161,29 @@ const Navbar = ({ user, logOut }) => {
                           )}
                         >
                           My Orders
-                        </a>
+                        </Link>
                       )}
                     </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href={"/Admin"}
-                          className={classNames(
-                            active
-                              ? "bg-violet-500 text-white"
-                              : "text-gray-900",
-                            "block px-4 py-2 text-sm rounded-md"
-                          )}
-                        >
-                          Settings
-                        </a>
-                      )}
-                    </Menu.Item>
+                    {cookie.userType == "admin" ||
+                    cookie.userType == "superAdmin" ? (
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            href={"/Admin"}
+                            className={classNames(
+                              active
+                                ? "bg-violet-500 text-white"
+                                : "text-gray-900",
+                              "block px-4 py-2 text-sm rounded-md"
+                            )}
+                          >
+                            Settings
+                          </Link>
+                        )}
+                      </Menu.Item>
+                    ) : (
+                      ""
+                    )}
                     <Menu.Item>
                       {({ active }) => (
                         <p
@@ -208,10 +203,10 @@ const Navbar = ({ user, logOut }) => {
                 </Menu.Items>
               </Transition>
             </Menu>
-          </>
+          </div>
         )}
 
-        {!user.status || localStorage.getItem("token") == {} ? (
+        {!cookie.user || !cookie.token ? (
           <Link href={"/login"}>
             <button className="cursor-pointer text-lg  text-[#34251F] rounded-md font-bold mx-2 transition ease-in-out hover:-translate-y-0.2 hover:scale-110 duration-150">
               Login
@@ -222,126 +217,7 @@ const Navbar = ({ user, logOut }) => {
         )}
 
         {/* Shopping Cart */}
-        <Popover className="ml-4 flow-root text-sm lg:relative lg:ml-8">
-          <Popover.Button className="group -m-2 flex items-center p-2">
-            {/* Bag Icon */}
-            <ShoppingBagIcon
-              className="h-6 w-6 hover:text-gray-500"
-              aria-hidden="true"
-            />
-
-            {Object.keys(cart).length > 0 && (
-              <span className="ml-2 text-sm font-medium">
-                {Object.keys(cart).length}
-              </span>
-            )}
-            <span className="sr-only">items in cart, view bag</span>
-          </Popover.Button>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-200"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Popover.Panel className="absolute inset-x-0 top-16 mt-px bg-white pb-6 shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:mt-3 lg:-mr-1.5 lg:w-80">
-              <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
-                <div className="flex items-start justify-between">
-                  <h2 className="text-lg font-medium text-gray-900">
-                    Shopping cart
-                  </h2>
-                  <div className="ml-3 flex h-7 items-center">
-                    <span className="sr-only">Close panel</span>
-                    {/* X icon */}
-                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="">
-                <ol className="ml-6 font-semibold list-decimal">
-                  {Object.keys(cart).length == 0 && (
-                    <div className="my-6 text-base font-medium text-gray-900">
-                      Your Cart is Empty
-                    </div>
-                  )}
-
-                  {Object.keys(cart).map((item) => (
-                    <li key={item}>
-                      <div className="item flex my-5">
-                        <div className="w-2/3 ml-1 font-semibold">
-                          {cart[item].name}
-                        </div>
-                        <div className="icon  flex justify-center items-center w-1/3 text-xl space-x-2">
-                          <AiFillMinusCircle
-                            className="cursor-pointer"
-                            onClick={() => dispatch(removeFromCart(item, 1))}
-                          />
-                          <span className="font-bold text-2xl">
-                            {cart[item].qty}
-                          </span>
-                          <AiFillPlusCircle
-                            className="cursor-pointer"
-                            onClick={() =>
-                              dispatch(
-                                addToCart(
-                                  item,
-                                  1,
-                                  cart[item].prise,
-                                  cart[item].name,
-                                  cart[item].size,
-                                  cart[item].varient,
-                                  cart[item].img
-                                )
-                              )
-                            }
-                          />
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-
-              {/* SubTotal */}
-
-              {Object.keys(cart).length != 0 && (
-                <div className="sub-total">
-                  <h3 className="font-semibold">
-                    Total Price :{" "}
-                    <span className="font-bold">Pkr {subtotal} </span>
-                  </h3>
-                </div>
-              )}
-
-              {Object.keys(cart).length != 0 && (
-                <div className="flex mt-5">
-                  <Link href={user.status ? "/cart" : "/login"}>
-                    <button
-                      onClick={activeCart}
-                      className="flex mr-2 text-[#34251F] font-bold bg-blue-500 border-0 py-2 px-2 focus:outline-none hover:bg-blue-600 rounded text-sm"
-                    >
-                      View Cart
-                    </button>
-                  </Link>
-                  <button
-                    disabled={Object.keys(cart).length == 0 ? true : false}
-                    onClick={() => {
-                      dispatch(clearCart());
-                      setSideCart(false);
-                      return;
-                    }}
-                    className="cursor-pointer flex mr-2   text-[#34251F] font-bold bg-blue-500 border-0 py-2 px-2 focus:outline-none hover:bg-blue-600 rounded text-sm disabled:bg-blue-400"
-                  >
-                    Clear Cart
-                  </button>
-                </div>
-              )}
-            </Popover.Panel>
-          </Transition>
-        </Popover>
+        <SideCart />
       </div>
     </div>
   );
