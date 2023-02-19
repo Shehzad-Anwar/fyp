@@ -1,122 +1,94 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart, updateCart, removeFromCart } from "../redux/actions";
+import { Fragment, useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { BellIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
-const CheckoutFrom = () => {
-  const dispatch = useDispatch();
-  let { cart } = useSelector((state) => state.CartReducer);
-  // const { rows, cart } = useSelector((state) => state.calculator);
+const userNavigation = [
+  { name: "Your Profile", href: "#" },
+  { name: "Settings", href: "#" },
+  { name: "Sign out", href: "#" },
+];
 
-  const add = (e) => {
-    e.preventDefault();
-    let Cart = {
-      itemCode: "jHjREd",
-      qty: 1,
-      price: 49,
-      name: "HSD Shirt",
-      size: "XXL",
-      varient: "white",
-      img: "https://m.media-amazon.com/images/I/61iqPK1B50L._AC_SX679_.jpg",
-    };
-    dispatch(addToCart(Cart));
-    console.log(cart);
-  };
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
-  const update = (e) => {
-    e.preventDefault();
-    let upCart = {
-      itemCode: "jHjREd",
-      qty: 10,
-    };
-    dispatch(updateCart(upCart));
-    console.log(cart);
-  };
-
-  const remove = (e) => {
-    e.preventDefault();
-    dispatch(removeFromCart({itemCode: "jHjREd"}));
-    console.log(cart);
-  };
+export default function Example() {
   return (
     <>
-      <div className="max-w-2xl lg:max-w-none mx-20 my-20">
-        <h1 className="sr-only">Checkout</h1>
-
-        <form>
-          <div>
-            <div className="mt-10 border-t border-gray-200 pt-10">
-              <h2 className="text-lg font-medium text-gray-900">
-                Product information
-              </h2>
-
-              <div className="border-t w-[400px] border-gray-200 py-6 px-2 sm:px-6">
-                <button
-                  type="submit"
-                  onClick={add}
-                  className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                  Add Product
-                </button>
+      <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
+        <div className="flex flex-1 justify-between px-4">
+          <div className="flex flex-1">
+            <form className="flex w-full md:ml-0" action="#" method="GET">
+              <label htmlFor="search-field" className="sr-only">
+                Search
+              </label>
+              <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
+                  <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <input
+                  id="search-field"
+                  className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
+                  placeholder="Search"
+                  type="search"
+                  name="search"
+                />
               </div>
-              <div className="border-t w-[400px] border-gray-200 py-6 px-2 sm:px-6">
-                <button
-                  type="submit"
-                  onClick={update}
-                  className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                  Add Update qty by 10
-                </button>
-              </div>
-
-              <div className="border-t w-[400px] border-gray-200 py-6 px-2 sm:px-6">
-                <button
-                  type="submit"
-                  onClick={remove}
-                  className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                 Remove itemCode: "jHjREd"
-                </button>
-              </div>
-            </div>
+            </form>
           </div>
-        </form>
-        <div>
-          <h1>Cart:</h1>
-          <ul>
-            {Object.keys(cart).map((item) => (
-              <li key={item}>
-                {cart[item].name} ({cart[item].qty} x ${cart[item].price})
-              </li>
-            ))}
-          </ul>
+          <div className="ml-4 flex items-center md:ml-6">
+            <button
+              type="button"
+              className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <span className="sr-only">View notifications</span>
+              <BellIcon className="h-6 w-6" aria-hidden="true" />
+            </button>
+
+            {/* Profile dropdown */}
+            <Menu as="div" className="relative ml-3">
+              <div>
+                <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    className="h-8 w-8 rounded-full"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                  />
+                </Menu.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  {userNavigation.map((item) => (
+                    <Menu.Item key={item.name}>
+                      {({ active }) => (
+                        <a
+                          href={item.href}
+                          className={classNames(
+                            active ? "bg-gray-100" : "",
+                            "block px-4 py-2 text-sm text-gray-700"
+                          )}
+                        >
+                          {item.name}
+                        </a>
+                      )}
+                    </Menu.Item>
+                  ))}
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </div>
         </div>
       </div>
     </>
   );
-};
-
-export default CheckoutFrom;
-
-// import React, { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { addToCart } from "../redux/actions";
-
-// const CheckoutFrom = () => {
-//   const dispatch = useDispatch();
-//   let { cart } = useSelector((state) => state.CartReducer);
-//   // const { rows, cart } = useSelector((state) => state.calculator);
-
-//   const Checkout = (e) => {
-//     e.preventDefault();
-//     let Cart = {
-//       itemCode: "jHjREd",
-//       qty: 1,
-//       price: 49,
-//       name: "HSD Shirt",
-//       size: "XXL",
-//       varient: "white",
-//       img: "https://m.media-amazon.com/images/I/61iqPK1B50L._AC_SX679_.jpg",
-//     };
-//     dispatch(addToCart(Cart));
-//     console.log(cart);
-//   };
+}

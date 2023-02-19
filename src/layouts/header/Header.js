@@ -32,7 +32,7 @@ const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
 
         <Box flexGrow={1} />
 
-        <ProfileDD />
+        {/* <ProfileDD /> */}
         {/* ------------------------------------------- */}
         {/* Profile Dropdown */}
         {/* ------------------------------------------- */}
