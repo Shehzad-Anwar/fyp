@@ -53,19 +53,6 @@ const Footer = () => {
   return (
     <>
       <footer className="bg-white">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="-mb-0.5 w-full"
-          viewBox="0 0 1367.743 181.155"
-        >
-          <path
-            className="fill-current text-gray-100 dark:text-gray-800"
-            id="wave"
-            data-name="wave"
-            d="M0,0S166.91-56.211,405.877-49.5,715.838,14.48,955.869,26.854,1366,0,1366,0V115H0Z"
-            transform="translate(1.743 66.155)"
-          ></path>
-        </svg>
         <div className="mx-auto max-w-7xl overflow-hidden bg-gradient-to-b from-gray-100 to-transparent py-12 px-4 sm:px-6 lg:px-8">
           <nav
             className="-mx-5 -my-2 flex flex-wrap justify-center"
