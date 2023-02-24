@@ -82,7 +82,7 @@ const reset = () => {
         <div className="relative hidden w-0 flex-1 md:block">
           <img
             className="absolute inset-0 h-full w-full object-contain"
-            src="../icons/reset.svg"
+            src="../icons/Resetpassword.gif"
             alt=""
           />
         </div>

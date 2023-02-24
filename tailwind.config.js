@@ -13,7 +13,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "warm-gray": colors.warmGray,
+        "warm-gray": colors.stone,
+        sky: colors.sky,
         teal: colors.teal,
       },
     },
@@ -29,6 +30,6 @@ module.exports = {
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/forms"),
     require("tw-elements/dist/plugin"),
-    require('flowbite/plugin'),
+    require("flowbite/plugin"),
   ],
 };

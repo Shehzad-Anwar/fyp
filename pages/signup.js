@@ -427,7 +427,7 @@ const Signup = () => {
         <div className="relative hidden w-0 flex-1 md:block">
           <img
             className="absolute inset-0 m-auto h-auto w-auto object-contain"
-            src="../icons/signup.svg"
+            src="../icons/Signup.gif"
             alt=""
           />
         </div>
@@ -436,4 +436,4 @@ const Signup = () => {
   );
 };
 
-export default Signup
+export default Signup;

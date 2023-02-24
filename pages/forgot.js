@@ -228,7 +228,7 @@ const Forgot = () => {
         <div className="relative hidden w-0 flex-1 md:block">
           <img
             className="absolute inset-0 h-full w-full object-contain"
-            src="../icons/forgot.svg"
+            src="../icons/Forgotpassword.gif"
             alt=""
           />
         </div>

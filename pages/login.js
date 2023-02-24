@@ -331,7 +331,7 @@ const Login = () => {
         <div className="relative hidden w-0 flex-1 md:block">
           <img
             className="absolute inset-0 ml-16 h-full w-3/4 object-contain"
-            src="../icons/Signin.svg"
+            src="../icons/Login.gif"
             alt=""
           />
         </div>
